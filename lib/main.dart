@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:latihan1_api/userdetail.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -59,19 +61,13 @@ class DataFromAPI extends StatelessWidget {
         child: FutureBuilder(
           future: getUserData(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
+            if (snapshot.data == null) {
+              return Container(
+                child: Center(
+                  child: Text('Loading...'),
+                ),
               );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            } else if (!snapshot.hasData || snapshot.data.isEmpty) {
-              return Center(
-                child: Text('No data available'),
-              );
-            } else {
+            } else
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, i) {
@@ -80,9 +76,8 @@ class DataFromAPI extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserDetailsPage(
-                            user: snapshot.data[i],
-                          ),
+                          builder: (context) =>
+                              UserDetailPage(snapshot.data[i]),
                         ),
                       );
                     },
@@ -110,45 +105,7 @@ class DataFromAPI extends StatelessWidget {
                   );
                 },
               );
-            }
           },
-        ),
-      ),
-    );
-  }
-}
-
-class UserDetailsPage extends StatelessWidget {
-  final User user;
-
-  UserDetailsPage({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(user.name),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(' ${user.name}'),
-            Text(' ${user.email}'),
-            Text(' ${user.username}'),
-            Text(' ${user.addressstreet}'),
-            Text(' ${user.addresssuite}'),
-            Text(' ${user.addresscity}'),
-            Text(' ${user.addresszipcode}'),
-            Text(' ${user.addressgeolat}'),
-            Text(' ${user.addressgeolng}'),
-            Text(' ${user.phone}'),
-            Text(' ${user.website}'),
-            Text(' ${user.companyname}'),
-            Text(' ${user.companycatchPhrase}'),
-            Text(' ${user.companybs}'),
-          ],
         ),
       ),
     );
