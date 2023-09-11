@@ -3,9 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class UserDetailPage extends StatelessWidget {
-  const UserDetailPage(data, {super.key});
+  final userId;
 
-  Future getUserData(int userId) async {
+  UserDetailPage(this.userId, {Key? key}) : super(key: key);
+
+  Future getUserData(userId) async {
     var response = await http
         .get(Uri.http('jsonplaceholder.typicode.com', 'users/$userId'));
     var jsonData = jsonDecode(response.body);
@@ -36,13 +38,13 @@ class UserDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Data API 1')),
+        title: Text('User Detail'),
       ),
       body: Container(
         child: FutureBuilder(
-          future: getUserData(2),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
+          future: getUserData(userId),
+          builder: (context, User) {
+            if (User == null) {
               return Container(
                 child: Center(
                   child: Text('Loading...'),
@@ -50,23 +52,23 @@ class UserDetailPage extends StatelessWidget {
               );
             } else {
               return ListTile(
-                title: Text(snapshot.data.name),
+                title: Text(userId.name),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(snapshot.data.username),
-                    Text(snapshot.data.email),
-                    Text(snapshot.data.addressstreet),
-                    Text(snapshot.data.addresssuite),
-                    Text(snapshot.data.addresscity),
-                    Text(snapshot.data.addresszipcode),
-                    Text(snapshot.data.addressgeolat),
-                    Text(snapshot.data.addressgeolng),
-                    Text(snapshot.data.phone),
-                    Text(snapshot.data.website),
-                    Text(snapshot.data.companyname),
-                    Text(snapshot.data.companycatchPhrase),
-                    Text(snapshot.data.companybs),
+                    Text(userId.username),
+                    Text(userId.email),
+                    Text(userId.addressstreet),
+                    Text(userId.addresssuite),
+                    Text(userId.addresscity),
+                    Text(userId.addresszipcode),
+                    Text(userId.addressgeolat),
+                    Text(userId.addressgeolng),
+                    Text(userId.phone),
+                    Text(userId.website),
+                    Text(userId.companyname),
+                    Text(userId.companycatchPhrase),
+                    Text(userId.companybs),
                   ],
                 ),
               );
