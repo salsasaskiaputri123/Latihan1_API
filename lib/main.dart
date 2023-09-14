@@ -31,6 +31,7 @@ class DataFromAPI extends StatelessWidget {
 
     for (var u in jsonData) {
       User user = User(
+        u['id'],
         u["name"],
         u["email"],
         u["username"],
@@ -73,11 +74,11 @@ class DataFromAPI extends StatelessWidget {
                 itemBuilder: (context, i) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
+                      Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>
-                              UserDetailPage(snapshot.data[i]),
+                          builder: (context) => UserDetailPage(
+                            id: snapshot.data[i].id,
+                          ),
                         ),
                       );
                     },
@@ -113,6 +114,7 @@ class DataFromAPI extends StatelessWidget {
 }
 
 class User {
+  final int id;
   final String name,
       email,
       username,
@@ -127,7 +129,9 @@ class User {
       companyname,
       companycatchPhrase,
       companybs;
+
   User(
+    this.id,
     this.name,
     this.email,
     this.username,
